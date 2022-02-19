@@ -26,7 +26,9 @@ public:
     void finalize() ;
     int get_quntity() const;
     int get_price() const;
+    int get_total_price() const;
 };
+
 
 
 ///////////// Person
@@ -55,7 +57,7 @@ protected:
     bool buy_from_seller(Seller*, Bank*);
     virtual bool accept_price(int)=0;
     bool execute_transaction(Transaction*, int, Bank*);
-    void deposit_money(int, Bank*);
+    void deposit_money(Transaction*, Bank*);
     void receive_dilithium(int);
 
 public:
@@ -101,13 +103,6 @@ public:
     void get_earned_money(Transaction*, Bank*);
 };
 
-Seller::Seller(std::string _name, int _dilithium, int _money, int _price):
-        Person(_name, _dilithium, _money), price(_price){};
-
-int Seller::get_price() const {
-    return price;
-}
-
 
 
 
@@ -146,14 +141,14 @@ public:
     ~Bank();
 
     //methods:
-    int register_transaction(Transaction*);
+    int register_transaction(Transaction*); /// receive money
     bool accept_transaction(Transaction*, int id);
 
-    void receive_money(int);
-    void receive_dilithium(int);
+    void receive_money(Transaction*);
+    void receive_dilithium(Transaction*);
 
-    void return_money(int);
-    void return_dilithium(int);
+    int return_money(Transaction*);
+    int return_dilithium(Transaction*);
 };
 
 ///////////// Universe
@@ -173,6 +168,11 @@ public:
 };
 
 
+
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 ///////////// Implementation
 
@@ -186,13 +186,17 @@ int Transaction::get_quntity() const {return quantity;}
 
 int Transaction::get_price() const {return price;}
 
+int Transaction::get_total_price() const {
+    return quantity*price;
+}
+
 ///////////// Person
 Person::Person(std::string _name, int _dilithium, int _money):
         name(_name), dilithium(_dilithium), money(_money){}
 
 ///////////// Buyer
 Buyer::Buyer(std::string _name, int _dilithium, int _money):
-        Person(_name, _dilithium, _money){};
+        Person(_name, _dilithium, _money), needed_dilithium(0){};
 
 bool Buyer::need_buy(int limit) {
     if(this->dilithium < limit) {
@@ -209,7 +213,7 @@ bool Buyer::buy_from_seller(Seller *seller, Bank *bank) {
 
     auto transaction = new Transaction(seller, this, this->needed_dilithium, price);
     int id = seller->register_transaction(transaction, bank); //sprzedawca zostawia dilithium w banku
-    this->deposit_money(this->needed_dilithium * price, bank);
+    this->deposit_money(transaction, bank);
 
     if(!this->execute_transaction(transaction, id, bank))
         return false;
@@ -217,10 +221,10 @@ bool Buyer::buy_from_seller(Seller *seller, Bank *bank) {
     //seller->get_earned_money(transaction, bank);  //tutaj w banku jeszcze bede musial zmienic;
     return true;
 }
-
-void Buyer::deposit_money(int cost, Bank *bank) {
-    this->money -= cost;
-    bank->receive_money(cost);
+//this->needed_dilithium * price
+void Buyer::deposit_money(Transaction* transaction, Bank *bank) {
+    this->money -= transaction->get_total_price();
+    bank->receive_money(transaction);
 }
 
 void Buyer::receive_dilithium(int quantity) {
@@ -255,6 +259,25 @@ Enterprise::Enterprise(std::string _name, int _dilithium, int _money):
 bool Enterprise::accept_price(int price) {return this->needed_dilithium * price < this->money;};
 
 
+
+///////////// Seller
+int Seller::register_transaction(Transaction *transaction, Bank *bank) {
+    this->dilithium -= transaction->get_quntity();
+
+    return bank->register_transaction(transaction);
+}
+
+void Seller::get_earned_money(Transaction *transaction, Bank *bank) {
+    int earning = bank->return_money(transaction);
+    this->money += money;
+}
+
+Seller::Seller(std::string _name, int _dilithium, int _money, int _price):
+        Person(_name, _dilithium, _money), price(_price){};
+
+int Seller::get_price() const {
+    return price;
+}
 
 
 
