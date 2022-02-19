@@ -1,0 +1,11 @@
+# ninja log v5
+0	255	6668944790792390	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
+257	378	6668944791999249	dilithium.exe	dfb85dd9bca09699
+1	244	6668945848962492	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
+244	352	6668945850020319	dilithium.exe	dfb85dd9bca09699
+1	301	6668995203232778	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
+302	436	6668995204549255	dilithium.exe	dfb85dd9bca09699
+1	380	6668996437247802	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
+1	276	6669094188405741	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
+1	268	6669094259753603	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
+277	393	6669094260958817	dilithium.exe	dfb85dd9bca09699
