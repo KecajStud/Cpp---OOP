@@ -86,7 +86,7 @@ public:
 
 ///////////// Seller
 class Seller: public Person{
-private:
+protected:
     int price;
 public:
     //technical part:
@@ -104,17 +104,21 @@ public:
 };
 
 
-
-
-
-
-
-
-
 ///////////// Kiligoni
 class Kiligoni: public Seller{
-    bool enough_dilithium(int ) override;
+public:
+    //technical part:
+    Kiligoni() = delete;
+    Kiligoni(std::string, int, int, int);
+    Kiligoni(const Kiligoni&) = delete;
+    Kiligoni& operator=(const Kiligoni&) = delete;
+    ~Kiligoni() override = default;
+
+
+    bool enough_dilithium(int) override;
 };
+
+
 
 ///////////// Ferengi
 class Ferengi: public Seller{
@@ -236,7 +240,7 @@ bool Buyer::execute_transaction(Transaction* transaction, int id, Bank* bank){
         return false;
     int quantity = transaction->get_quntity();
     this->dilithium += quantity;
-    bank->return_dilithium(quantity);
+    bank->return_dilithium(transaction);
     return true;
 }
 
@@ -256,9 +260,8 @@ void Buyer::buy_dilithium(std::vector<Seller *> sellers, Bank* bank, int limit )
 Enterprise::Enterprise(std::string _name, int _dilithium, int _money):
         Buyer(_name, _dilithium, _money){};
 
-bool Enterprise::accept_price(int price) {return this->needed_dilithium * price < this->money;};
-
-
+bool Enterprise::accept_price(int price) {
+    return this->needed_dilithium * price < this->money;};
 
 ///////////// Seller
 int Seller::register_transaction(Transaction *transaction, Bank *bank) {
@@ -279,8 +282,15 @@ int Seller::get_price() const {
     return price;
 }
 
+///////////// Kiligoni
+Kiligoni::Kiligoni(std::string _name, int _dilithium, int _money, int _price):
+        Seller(_name, _dilithium, _money, _price){};
 
+bool Kiligoni::enough_dilithium(int quntity) {
+    return quntity <= this->dilithium;
+}
 
+///////////// Ferengi
 
 int main() {
 //    Bank bank_of_universe();
