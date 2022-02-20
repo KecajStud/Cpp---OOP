@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <map>
+//#include <pair>
 
 class Seller;
 class Buyer;
@@ -48,6 +49,7 @@ public:
     Person(std::string, int, int);
     Person& operator=(const Person&) = delete;
     virtual ~Person() = default;
+    void print_statistics();
 };
 
 ///////////// Buyer

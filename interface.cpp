@@ -24,6 +24,9 @@ int Transaction::get_total_price() const {
 Person::Person(std::string _name, int _dilithium, int _money):
         name(_name), dilithium(_dilithium), money(_money){}
 
+void Person::print_statistics() {
+    std::cout<<std::endl<<this->name<< " posiada dilithium: "<<this->dilithium<<" oraz pieniadze: "<< this->money;
+}
 ///////////// Buyer
 Buyer::Buyer(std::string _name, int _dilithium, int _money):
         Person(_name, _dilithium, _money), needed_dilithium(0){};
@@ -47,8 +50,9 @@ bool Buyer::buy_from_seller(Seller *seller, Bank *bank) {
 
     if(!this->execute_transaction(transaction, id, bank))
         return false;
+    std::cout<<this->name<<" zakupil: "<<this->needed_dilithium<<" dilithium, po cenie: "<<transaction->get_price()<<std::endl;
 
-    //seller->get_earned_money(transaction, bank);  //tutaj w banku jeszcze bede musial zmienic;
+    seller->get_earned_money(transaction, bank);  //tutaj w banku jeszcze bede musial zmienic;
     return true;
 }
 //this->needed_dilithium * price
@@ -76,8 +80,8 @@ void Buyer::buy_dilithium(std::vector<Seller *> sellers, Bank* bank, int limit )
     for(int i=0; i<sellers.size() && !success;i++)
         success = this->buy_from_seller(sellers[i],  bank);
 
-    if (success)
-        std::cout<<this->name<<" zakupil: "<<this->needed_dilithium<<" dilithium."<<std::endl;
+//    if (success)
+//        std::cout<<this->name<<" zakupil: "<<this->needed_dilithium<<" dilithium."<<std::endl;
 
 }
 
@@ -97,7 +101,7 @@ int Seller::register_transaction(Transaction *transaction, Bank *bank) {
 
 void Seller::get_earned_money(Transaction *transaction, Bank *bank) {
     int earning = bank->return_money(transaction);
-    this->money += money;
+    this->money += earning;
 }
 
 Seller::Seller(std::string _name, int _dilithium, int _money, int _price):

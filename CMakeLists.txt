@@ -3,4 +3,4 @@ project(dilithium)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(dilithium main.cpp)
+add_executable(dilithium main.cpp interface.cpp)

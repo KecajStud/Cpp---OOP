@@ -1,13 +1,13 @@
 # ninja log v5
-0	255	6668944790792390	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
-257	378	6668944791999249	dilithium.exe	dfb85dd9bca09699
-1	244	6668945848962492	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
-244	352	6668945850020319	dilithium.exe	dfb85dd9bca09699
-1	301	6668995203232778	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
-302	436	6668995204549255	dilithium.exe	dfb85dd9bca09699
-1	380	6668996437247802	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
-1	276	6669094188405741	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
-1	268	6669094259753603	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
-277	393	6669094260958817	dilithium.exe	dfb85dd9bca09699
-1	1978	6670630385879474	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
-1979	2202	6670630388090523	dilithium.exe	dfb85dd9bca09699
+1	378	6670670759469706	CMakeFiles/dilithium.dir/main.cpp.obj	d5b40aff4003bf13
+1	132	6670674644586986	dilithium.exe	650e26ed386cef50
+2	545	6670674400757328	CMakeFiles/dilithium.dir/interface.cpp.obj	1c389481b0ca5b44
+0	7	0	clean	6b30813bc0a2560
+1	147	6670676809361837	build.ninja	4bfcd058763dda92
+1	169	6670676809361837	build.ninja	4bfcd058763dda92
+1	856	6670676818235514	CMakeFiles/dilithium.dir/interface.cpp.obj	1c389481b0ca5b44
+857	1118	6670676820449456	dilithium.exe	650e26ed386cef50
+1	528	6670677164670120	CMakeFiles/dilithium.dir/interface.cpp.obj	1c389481b0ca5b44
+528	659	6670677165955133	dilithium.exe	650e26ed386cef50
+1	538	6670677603723127	CMakeFiles/dilithium.dir/interface.cpp.obj	1c389481b0ca5b44
+538	670	6670677605028876	dilithium.exe	650e26ed386cef50
