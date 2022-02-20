@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 
 class Seller;
 class Buyer;
@@ -24,12 +25,10 @@ public:
     ~Transaction() = default;
 
     void finalize() ;
-    int get_quntity() const;
+    int get_quantity() const;
     int get_price() const;
     int get_total_price() const;
 };
-
-
 
 ///////////// Person
 class Person{
@@ -44,7 +43,6 @@ public:
     Person& operator=(const Person&) = delete;
     virtual ~Person() = default;
 };
-
 
 ///////////// Buyer
 class Buyer: public Person{
@@ -118,23 +116,32 @@ public:
     bool enough_dilithium(int) override;
 };
 
-
-
 ///////////// Ferengi
 class Ferengi: public Seller{
 private:
     int price_for_friend;
     std::vector<Ferengi*> friends;
-    void internal_transaction(Ferengi*, int, int);
+    void internal_transaction(Ferengi*, int);
+
 public:
-    bool enough_dilithium() override;
+    //technical part:
+    Ferengi() = delete;
+    Ferengi(std::string, int, int, int);
+    Ferengi(const Kiligoni&) = delete;
+    Ferengi& operator=(const Ferengi&) = delete;
+    ~Ferengi() override = default;
+
+    void add_friend(Ferengi*);
+    bool enough_dilithium(int) override;
 };
 
 ///////////// Bank
 class Bank{
 private:
-    std::vector<Transaction> current_transactions;
-    std::vector<Transaction> archive;
+    int current_id;
+    std::map<int, Transaction*> current_transactions;
+    //std::vector<Transaction*> current_transactions;
+    std::vector<Transaction*> archive;
     int dilithium;
     int money;
 public:
@@ -146,7 +153,7 @@ public:
 
     //methods:
     int register_transaction(Transaction*); /// receive money
-    bool accept_transaction(Transaction*, int id);
+    bool accept_transaction(Transaction*, int);
 
     void receive_money(Transaction*);
     void receive_dilithium(Transaction*);
@@ -154,6 +161,45 @@ public:
     int return_money(Transaction*);
     int return_dilithium(Transaction*);
 };
+Bank::~Bank() {
+    for(auto current: current_transactions) delete current.second;
+    for(auto archived: archive) delete archived;
+}
+
+int Bank::register_transaction(Transaction * transaction) {
+    this->current_transactions[++current_id] = transaction;
+    this->dilithium += transaction->get_quantity();
+    return this->current_id;
+}
+
+bool Bank::accept_transaction(Transaction * transaction, int id) {
+    Transaction* transaction_to_accept = current_transactions[id];
+    if(transaction_to_accept != transaction) return false;
+    current_transactions.erase(id);
+    archive.push_back(transaction);
+    return true;
+}
+
+void Bank::receive_money(Transaction * transaction) {
+    this->money += transaction->get_total_price();
+}
+
+void Bank::receive_dilithium(Transaction * transaction) {
+    this->dilithium += transaction->get_quantity();
+}
+
+int Bank::return_money(Transaction * transaction) {
+    int total_price = transaction->get_total_price();
+    this->money -= total_price;
+    return total_price;
+}
+
+int Bank::return_dilithium(Transaction *transaction) {
+    int dilithium_to_return = transaction->get_quantity();
+    this->dilithium -= dilithium_to_return;
+    return dilithium_to_return;
+}
+
 
 ///////////// Universe
 class Universe{
@@ -173,10 +219,6 @@ public:
 
 
 
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////
 ///////////// Implementation
 
@@ -186,7 +228,7 @@ Transaction::Transaction(Seller *_seller, Buyer *_buyer, int _quantity, int _pri
 
 void Transaction::finalize() {finalized = true;}
 
-int Transaction::get_quntity() const {return quantity;}
+int Transaction::get_quantity() const {return quantity;}
 
 int Transaction::get_price() const {return price;}
 
@@ -238,8 +280,7 @@ void Buyer::receive_dilithium(int quantity) {
 bool Buyer::execute_transaction(Transaction* transaction, int id, Bank* bank){
     if(!bank->accept_transaction(transaction, id))
         return false;
-    int quantity = transaction->get_quntity();
-    this->dilithium += quantity;
+    this->dilithium += transaction->get_quantity();
     bank->return_dilithium(transaction);
     return true;
 }
@@ -265,7 +306,7 @@ bool Enterprise::accept_price(int price) {
 
 ///////////// Seller
 int Seller::register_transaction(Transaction *transaction, Bank *bank) {
-    this->dilithium -= transaction->get_quntity();
+    this->dilithium -= transaction->get_quantity();
 
     return bank->register_transaction(transaction);
 }
@@ -291,6 +332,32 @@ bool Kiligoni::enough_dilithium(int quntity) {
 }
 
 ///////////// Ferengi
+Ferengi::Ferengi(std::string _name, int _dilithium, int _money, int _price):
+        Seller(_name, _dilithium, _money, _price), friends(), price_for_friend(0){};
+
+void Ferengi::add_friend(Ferengi *firend) {
+    friends.push_back(firend);};
+
+void Ferengi::internal_transaction(Ferengi * friend_seller, int quantity) {
+    if(quantity > friend_seller->dilithium) quantity = friend_seller->dilithium;
+    if(quantity * friend_seller->price_for_friend > this->money) quantity = this->money / friend_seller->price_for_friend;
+
+    int total_price = quantity * friend_seller->price_for_friend;
+    this->dilithium += quantity;
+    friend_seller->dilithium -= quantity;
+    this->money -= total_price;
+    friend_seller->money = total_price;
+}
+
+bool Ferengi::enough_dilithium(int quantity){
+    for(int i=0;this->dilithium<quantity && i<friends.size();){
+        this->internal_transaction(friends[i],quantity);
+    }
+    return quantity < this->dilithium;
+}
+
+///////////// Bank
+
 
 int main() {
 //    Bank bank_of_universe();
