@@ -50,8 +50,8 @@ bool Buyer::buy_from_seller(Seller *seller, Bank *bank) {
 
     if(!this->execute_transaction(transaction, id, bank))
         return false;
-    std::cout<<this->name<<" zakupil: "<<this->needed_dilithium<<" dilithium, po cenie: "<<transaction->get_price()<<std::endl;
 
+    std::cout<<this->name<<" zakupil: "<<this->needed_dilithium<<" dilithium, po cenie: "<<transaction->get_price()<<std::endl;
     seller->get_earned_money(transaction, bank);  //tutaj w banku jeszcze bede musial zmienic;
     return true;
 }
@@ -79,10 +79,6 @@ void Buyer::buy_dilithium(std::vector<Seller *> sellers, Bank* bank, int limit )
     bool success = false;
     for(int i=0; i<sellers.size() && !success;i++)
         success = this->buy_from_seller(sellers[i],  bank);
-
-//    if (success)
-//        std::cout<<this->name<<" zakupil: "<<this->needed_dilithium<<" dilithium."<<std::endl;
-
 }
 
 ///////////// Enterprise

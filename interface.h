@@ -100,7 +100,7 @@ public:
     Seller(std::string, int, int, int);
     Seller(const Seller&) = delete;
     Seller& operator=(const Seller&) = delete;
-    ~Seller() override = default;
+    ~Seller() = default;
 
     //methods:
     int get_price() const;
