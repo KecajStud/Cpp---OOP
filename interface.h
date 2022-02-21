@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <map>
+//#include <deque>
 //#include <pair>
 
 class Seller;
@@ -140,6 +141,7 @@ public:
     ~Ferengi() override = default;
 
     void add_friend(Ferengi*);
+    void print_friends();
     bool enough_dilithium(int) override;
 };
 
@@ -178,7 +180,7 @@ private:
     std::vector<Person*> buyer_list;
 public:
     Universe() = delete;
-    Universe(int, int, int);
+    Universe(int, int);
     Universe(const Universe&) = delete;
     Universe& operator=( const Universe&) = delete;
     ~Universe();

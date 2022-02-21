@@ -140,6 +140,12 @@ bool Ferengi::enough_dilithium(int quantity){
     return quantity <= this->dilithium;
 }
 
+void Ferengi::print_friends() {
+    std::cout<<this->name<<" ma przyjaciol: ";
+    for (auto ferengi_friend: this->friends) std::cout<<ferengi_friend->name<< ", ";
+    std::cout<<std::endl;
+}
+
 ///////////// Bank
 Bank::~Bank() {
     for(auto current: current_transactions) delete current.second;
@@ -181,3 +187,27 @@ int Bank::return_dilithium(Transaction *transaction) {
 }
 
 ///////////// Universe
+Universe::Universe(int buyers_number, int sellers_number): seller_list(), buyer_list(){
+    for (int i=0;i<buyers_number;i++)
+        buyer_list.push_back(new Enterprise("Buyer" + std::to_string(i), rand()%10 * 100 + 100, rand()%10 * 100 + 100));
+   int kiligoni = 0;
+   int ferengi = 0;
+   std::vector<Ferengi*> friends;
+    for (int i=0;i<sellers_number;i++){
+        if(rand()%2 == 0)
+            seller_list.push_back(new Kiligoni("Sprzedajacy_Kiligoni" + std::to_string(kiligoni++), rand()%10 * 100 + 100, rand()%10 * 100 + 100, rand()%3+1));
+        else{
+            auto new_ferengi = new Ferengi("Sprzedajacy_Ferengi"+ std::to_string(ferengi++), rand()%10 * 100 + 100, rand()%10 * 100 + 100, rand()%3+1);
+            seller_list.push_back(new_ferengi);
+            friends.push_back(new_ferengi);
+        }
+    }
+    //adding friends of Ferengi (3)
+    for(int i=0;i<ferengi;i++) {
+        int multiplier = i / 3;
+        for (int j = multiplier * 3; j<ferengi && j < multiplier * 3 + 3; j++){
+            if (i != j) friends[i]->add_friend(friends[j]);
+        }
+    }
+    delete &friends;
+}
