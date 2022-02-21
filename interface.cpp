@@ -117,27 +117,27 @@ bool Kiligoni::enough_dilithium(int quntity) {
 
 ///////////// Ferengi
 Ferengi::Ferengi(std::string _name, int _dilithium, int _money, int _price):
-        Seller(_name, _dilithium, _money, _price), friends(), price_for_friend(0){};
+        Seller(_name, _dilithium, _money, _price), friends(), price_for_friend(1){};
 
 void Ferengi::add_friend(Ferengi *firend) {
     friends.push_back(firend);};
 
 void Ferengi::internal_transaction(Ferengi * friend_seller, int quantity) {
     if(quantity > friend_seller->dilithium) quantity = friend_seller->dilithium;
-    if(quantity * friend_seller->price_for_friend > this->money) quantity = this->money / friend_seller->price_for_friend;
+    if((quantity * friend_seller->price_for_friend) > this->money) quantity = this->money / friend_seller->price_for_friend;
 
     int total_price = quantity * friend_seller->price_for_friend;
     this->dilithium += quantity;
     friend_seller->dilithium -= quantity;
     this->money -= total_price;
-    friend_seller->money = total_price;
+    friend_seller->money += total_price;
 }
 
 bool Ferengi::enough_dilithium(int quantity){
     for(int i=0;this->dilithium<quantity && i<friends.size();){
-        this->internal_transaction(friends[i],quantity);
+        this->internal_transaction(friends[i],quantity - this->dilithium );
     }
-    return quantity < this->dilithium;
+    return quantity <= this->dilithium;
 }
 
 ///////////// Bank
