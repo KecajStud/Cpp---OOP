@@ -186,10 +186,15 @@ int Bank::return_dilithium(Transaction *transaction) {
     return dilithium_to_return;
 }
 
+void Bank::print_statistics() {
+    std::cout<<"Current ID: "<<current_id<<", dilithium: "<<dilithium<<", money: "<<money<<std::endl;
+}
+
 ///////////// Universe
-Universe::Universe(int buyers_number, int sellers_number): seller_list(), buyer_list(){
+Universe::Universe(int buyers_number, int sellers_number, int _days_num): seller_list(), buyer_list(), days_num(_days_num), bank(new Bank()){
     for (int i=0;i<buyers_number;i++)
         buyer_list.push_back(new Enterprise("Buyer" + std::to_string(i), rand()%10 * 100 + 100, rand()%10 * 100 + 100));
+
    int kiligoni = 0;
    int ferengi = 0;
    std::vector<Ferengi*> friends;
@@ -205,9 +210,68 @@ Universe::Universe(int buyers_number, int sellers_number): seller_list(), buyer_
     //adding friends of Ferengi (3)
     for(int i=0;i<ferengi;i++) {
         int multiplier = i / 3;
+
         for (int j = multiplier * 3; j<ferengi && j < multiplier * 3 + 3; j++){
             if (i != j) friends[i]->add_friend(friends[j]);
         }
     }
-    delete &friends;
 }
+
+Universe::~Universe() {
+    for(auto seller: seller_list) delete seller;
+    for(auto buyer: buyer_list) delete buyer;
+}
+
+void Universe::update() {
+    std::cout<<"Poczatek symulacji"<<std::endl<<std::endl<<"Buyers: ";
+    for(auto buyer: buyer_list) buyer->print_statistics();
+    std::cout<<std::endl<<std::endl<<"Sellers: ";
+    for(auto seller: seller_list) seller->print_statistics();
+
+    for(int i=0;i<days_num;i++){
+        for(auto buyer: this->buyer_list){
+            buyer->buy_dilithium(this->seller_list, this->bank, (rand()%30)*100);
+        }
+    }
+
+    std::cout<<std::endl<<std::endl<<"Koniec symulacji"<<std::endl<<std::endl<<"Buyers: ";
+    for(auto buyer: buyer_list) buyer->print_statistics();
+    std::cout<<std::endl<<std::endl<<"Sellers: ";
+    for(auto seller: seller_list) seller->print_statistics();
+
+    //foreach buyer check if ewant to buy
+    //  go to seller and check price if ok buy if transaction finalised go to bank and get money
+    //  if no go to another seller
+    // print statistics foreach buyer/seller ->seller: cena dilithium :)
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

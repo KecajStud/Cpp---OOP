@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <time.h>
 //#include <deque>
 //#include <pair>
 
@@ -170,17 +171,19 @@ public:
 
     int return_money(Transaction*);
     int return_dilithium(Transaction*);
+    void print_statistics();
 };
 
 ///////////// Universe
 class Universe{
 private:
-    Bank bank;
-    std::vector<Person*> seller_list;
-    std::vector<Person*> buyer_list;
+    int days_num;
+    Bank* bank;
+    std::vector<Seller*> seller_list;
+    std::vector<Buyer*> buyer_list;
 public:
     Universe() = delete;
-    Universe(int, int);
+    Universe(int, int, int);
     Universe(const Universe&) = delete;
     Universe& operator=( const Universe&) = delete;
     ~Universe();

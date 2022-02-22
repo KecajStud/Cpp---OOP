@@ -1,6 +1,7 @@
 #include "interface.h"
 
 int main() {
+    srand(time(NULL));
 //    Bank* universe_bank = new Bank();
 //    auto kupujacy = new Enterprise("kupujacy", 300, 1000);
 //    auto sprzedajacy = new Kiligoni("sprzedajacy zwykly", 100, 100, 2);
@@ -50,8 +51,8 @@ int main() {
 //    }
 //    for(auto ferengi_friends: friends) ferengi_friends->print_friends();
 
-    Universe universe(2,6);
-
+    Universe universe(2,8,5);
+    universe.update();
 
     return 0;
 }
