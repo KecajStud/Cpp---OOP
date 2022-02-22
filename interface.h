@@ -9,8 +9,6 @@
 #include <vector>
 #include <map>
 #include <time.h>
-//#include <deque>
-//#include <pair>
 
 class Seller;
 class Buyer;
@@ -122,7 +120,7 @@ public:
     Kiligoni& operator=(const Kiligoni&) = delete;
     ~Kiligoni() override = default;
 
-
+    //methods:
     bool enough_dilithium(int) override;
 };
 
@@ -141,6 +139,7 @@ public:
     Ferengi& operator=(const Ferengi&) = delete;
     ~Ferengi() override = default;
 
+    //methods:
     void add_friend(Ferengi*);
     void print_friends();
     bool enough_dilithium(int) override;
@@ -151,7 +150,6 @@ class Bank{
 private:
     int current_id;
     std::map<int, Transaction*> current_transactions;
-    //std::vector<Transaction*> current_transactions;
     std::vector<Transaction*> archive;
     int dilithium;
     int money;
@@ -188,6 +186,7 @@ public:
     Universe& operator=( const Universe&) = delete;
     ~Universe();
 
+    //methods:
     void update();
 };
 
