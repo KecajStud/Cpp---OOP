@@ -51,7 +51,7 @@ int main() {
 //    }
 //    for(auto ferengi_friends: friends) ferengi_friends->print_friends();
 
-    Universe universe(2,8,5);
+    Universe universe(100,20,5);
     universe.update();
 
     return 0;

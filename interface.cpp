@@ -134,7 +134,7 @@ void Ferengi::internal_transaction(Ferengi * friend_seller, int quantity) {
 }
 
 bool Ferengi::enough_dilithium(int quantity){
-    for(int i=0;this->dilithium<quantity && i<friends.size();){
+    for(int i=0;this->dilithium<quantity && i<friends.size();i++){
         this->internal_transaction(friends[i],quantity - this->dilithium );
     }
     return quantity <= this->dilithium;
@@ -194,15 +194,17 @@ void Bank::print_statistics() {
 Universe::Universe(int buyers_number, int sellers_number, int _days_num): seller_list(), buyer_list(), days_num(_days_num), bank(new Bank()){
     for (int i=0;i<buyers_number;i++)
         buyer_list.push_back(new Enterprise("Buyer" + std::to_string(i), rand()%10 * 100 + 100, rand()%10 * 100 + 100));
+//        buyer_list.push_back(new Enterprise("Buyer" + std::to_string(i), 600, 2000));
 
    int kiligoni = 0;
    int ferengi = 0;
    std::vector<Ferengi*> friends;
     for (int i=0;i<sellers_number;i++){
         if(rand()%2 == 0)
-            seller_list.push_back(new Kiligoni("Sprzedajacy_Kiligoni" + std::to_string(kiligoni++), rand()%10 * 100 + 100, rand()%10 * 100 + 100, rand()%3+1));
+            seller_list.push_back(new Kiligoni("Sprzedajacy_Kiligoni" + std::to_string(kiligoni++), rand()%10 * 100 + 100, rand()%30 * 100 + 100, rand()%3+1));
         else{
-            auto new_ferengi = new Ferengi("Sprzedajacy_Ferengi"+ std::to_string(ferengi++), rand()%10 * 100 + 100, rand()%10 * 100 + 100, rand()%3+1);
+            auto new_ferengi = new Ferengi("Sprzedajacy_Ferengi"+ std::to_string(ferengi++), rand()%20 * 100 + 100, rand()%20 * 100 + 100, rand()%3+1);
+//            auto new_ferengi = new Ferengi("Sprzedajacy_Ferengi"+ std::to_string(ferengi++), 200, 500, 2);
             seller_list.push_back(new_ferengi);
             friends.push_back(new_ferengi);
         }
@@ -227,14 +229,17 @@ void Universe::update() {
     for(auto buyer: buyer_list) buyer->print_statistics();
     std::cout<<std::endl<<std::endl<<"Sellers: ";
     for(auto seller: seller_list) seller->print_statistics();
+    std::cout<<std::endl;
 
     for(int i=0;i<days_num;i++){
         for(auto buyer: this->buyer_list){
-            buyer->buy_dilithium(this->seller_list, this->bank, (rand()%30)*100);
+            buyer->buy_dilithium(this->seller_list, this->bank, (rand()%15)*100);
+//            buyer->buy_dilithium(this->seller_list, this->bank, 1000);
         }
     }
 
     std::cout<<std::endl<<std::endl<<"Koniec symulacji"<<std::endl<<std::endl<<"Buyers: ";
+
     for(auto buyer: buyer_list) buyer->print_statistics();
     std::cout<<std::endl<<std::endl<<"Sellers: ";
     for(auto seller: seller_list) seller->print_statistics();
@@ -243,8 +248,6 @@ void Universe::update() {
     //  go to seller and check price if ok buy if transaction finalised go to bank and get money
     //  if no go to another seller
     // print statistics foreach buyer/seller ->seller: cena dilithium :)
-
-
 
 
 
