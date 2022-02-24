@@ -40,7 +40,7 @@ struct Transaction{
 
 
 class Trader{
-private:
+protected:
     std::string traderName;
     int energyCredit;
     int dilithiumUnits;
@@ -48,13 +48,29 @@ private:
 public:
     std::string name();
     //technical part:
-    Trader(std::string traderName, BankOfUniverse &bank, int energyCredit, int dilithiumUnits);
+    Trader(std::string traderName, BankOfUniverse &bank, int energyCredit=0, int dilithiumUnits=0);
     Trader(const Trader&) = default;
     Trader& operator=(const Trader&) = delete;
     virtual ~Trader() = default; //prawdopodobnie wywyola podstawowy destruktor dla danej klasy, a co z referencja
 };
 
-
+class Seller: public Trader{
+protected:
+    int dilithiumPrice;
+    virtual int giveDilithium(int cnt);
+public:
+    virtual int getPrice();
+    virtual bool acquire(int cnt)=0;
+    virtual int sell(Buyer* toWhom, int cnt);
+    virtual void takeCredit(int amount);
+    //technical part:
+    Seller(std::string traderName, BankOfUniverse &bank, int energyCredit, int dilithiumUnits=0, int dilithiumPrice=0):
+            Trader(traderName, bank, energyCredit, dilithiumUnits), dilithiumPrice (dilithiumPrice){};
+    Seller(const Seller&) = default;
+    Seller& operator=(const Seller&) = delete;
+    ~Seller() = default;
+    friend BankOfUniverse; //oho mamy przyjaciela -> bank moze korzystac z metod sprzedawcy?? ocb
+};
 
 
 
