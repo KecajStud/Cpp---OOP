@@ -57,12 +57,12 @@ public:
 class Seller: public Trader{
 protected:
     int dilithiumPrice;
-    virtual int giveDilithium(int cnt);
+    virtual int giveDilithium(int cnt); // oddaj dana ilosc dilithium
 public:
     virtual int getPrice();
     virtual bool acquire(int cnt)=0;
-    virtual int sell(Buyer* toWhom, int cnt);
-    virtual void takeCredit(int amount);
+    virtual int sell(Buyer* toWhom, int cnt); // sprawdz, czy masz wystarczajaco, jak tak, to idz do banku z tym <--- tutaj jest realizowane oddawanie hajsu -> zwraca id
+    virtual void takeCredit(int amount); // zbierz hajs za transakce
     //technical part:
     Seller(std::string traderName, BankOfUniverse &bank, int energyCredit, int dilithiumUnits=0, int dilithiumPrice=0):
             Trader(traderName, bank, energyCredit, dilithiumUnits), dilithiumPrice (dilithiumPrice){};
@@ -72,7 +72,13 @@ public:
     friend BankOfUniverse; //oho mamy przyjaciela -> bank moze korzystac z metod sprzedawcy?? ocb
 };
 
-
+class Buyer: public Trader{
+    virtual bool accept(int price);
+public:
+    bool buy(int cnt, Seller *fromWho);  //->spytaj o cene i sprawdz, czy git -> odbierz id (sprzedawca->sprzedaje) -> sprawdz, czy id ok -> idz do banku i finalizuj (bank->finalize)
+    virtual int giveCredits(int amount); // -> check if enough credit and give energy point -> or send message and return -1
+    virtual void takeDilithium(); // -> check if >0 and change dilithiumUnits
+};
 
 
 
