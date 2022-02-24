@@ -102,5 +102,23 @@ public:
     ~Ferengi() override = default;
 };
 
+class BankOfUniverse{
+private:
+    std::vector<Transaction> log;
+    std::map<int, Transaction> current;
+    int curr_id;
+    int storedEnergyCredits;
+    int storedDilithium;
+public:
+    int registerTransaction(Seller *pSeller, Buyer *pBuyer, int cnt, int itemPrice);
+    bool finalizePurchace(int id, int cnt, int price, Buyer *pBuyer, Seller *pSeller);
+    void printLog();
+    void printCurrent();
+    //technical part;
+    explicit BankOfUniverse(int storedEnergyCredits=0, int storedDillithium=0);
+    BankOfUniverse(const BankOfUniverse&) = delete; // <------ Tylko jeden jest bank
+    BankOfUniverse& operator=(const BankOfUniverse&) = delete;
+    ~BankOfUniverse() = default;
+};
 
 #endif //DILITHIUM_INTERFACE_H
