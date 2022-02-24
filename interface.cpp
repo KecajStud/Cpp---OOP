@@ -16,8 +16,6 @@ Trader::Trader(std::string traderName, BankOfUniverse &bank, int energyCredit, i
         traderName(std::move(traderName)), bank(bank), energyCredit(energyCredit), dilithiumUnits(dilithiumUnits) {}
 
 ///////////// Seller: public Trader
-
-
 int Seller::getPrice() {return this->dilithiumPrice;}
 int Seller::sell(Buyer *toWhom, int cnt){
     if(!acquire(cnt))
@@ -26,6 +24,8 @@ int Seller::sell(Buyer *toWhom, int cnt){
         return bank.registerTransaction(this, toWhom, cnt, this->dilithiumPrice);
 }
 
+///////////// Buyer: public Trader
+Buyer::Buyer(std::string traderName, BankOfUniverse &bank, int energyCredit=0, int dilithiumUnits=0): Trader(traderName, bank, energyCredit, dilithiumUnits){};
 
 
 
