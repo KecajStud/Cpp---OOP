@@ -6,8 +6,14 @@
 /////////////////////////////////////////////////////////////////////////////////////////////
 ///////////// Implementation
 
-///////////// First class
+///////////// Transaction
+Transaction::Transaction(int id, Buyer *toWhom, Seller *fromWhom, int cnt, int itemPrice, TransactionStatus status):
+        id(id), toWhom(toWhom), fromWho(fromWhom), cnt(cnt), itemPrice(itemPrice), status(status){}
+Transaction::Transaction(const Transaction &tr): Transaction(tr.id, tr.toWhom, tr.fromWho, tr.cnt, tr.itemPrice, tr.status) {}
 
+///////////// Trader
+Trader::Trader(std::string traderName, BankOfUniverse &bank, int energyCredit, int dilithiumUnits):
+        traderName(std::move(traderName)), bank(bank), energyCredit(energyCredit), dilithiumUnits(dilithiumUnits) {}
 
 
 
