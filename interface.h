@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <time.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +65,7 @@ public:
     virtual int sell(Buyer* toWhom, int cnt); // sprawdz, czy masz wystarczajaco, jak tak, to idz do banku z tym <--- tutaj jest realizowane oddawanie hajsu -> zwraca id
     virtual void takeCredit(int amount); // zbierz hajs za transakce
     //technical part:
-    Seller(std::string traderName, BankOfUniverse &bank, int energyCredit, int dilithiumUnits=0, int dilithiumPrice=0):
+    Seller(std::string traderName, BankOfUniverse &bank, int dilithiumPrice, int energyCredit=0, int dilithiumUnits=0):
             Trader(traderName, bank, energyCredit, dilithiumUnits), dilithiumPrice (dilithiumPrice){};
     Seller(const Seller&) = default;
     Seller& operator=(const Seller&) = delete;
@@ -85,6 +86,21 @@ public:
     ~Buyer() = default;
 };
 
+class Ferengi: public Seller{
+private:
+    std::set<Ferengi*> chain;
+public:
+    void addNewToGroup(Ferengi*);
+    int internalTradePrice();
+    bool acquire(int cnt) override;
+    int sendMeDilithium(int needed, Ferengi* toWhom);
+
+    //technical:
+    Ferengi(std::string traderName, BankOfUniverse &bank, int dilithiumPrice, int energyCredit=0, int dilithiumUnits=0, const std::set<Ferengi*> &chain={}); // -> podczas konstrukcji mogę podać grupe przyjaciol
+    Ferengi(const Ferengi&);
+    Ferengi& operator=(Ferengi&) = delete;
+    ~Ferengi() override = default;
+};
 
 
 #endif //DILITHIUM_INTERFACE_H
