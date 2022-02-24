@@ -15,6 +15,14 @@ Transaction::Transaction(const Transaction &tr): Transaction(tr.id, tr.toWhom, t
 Trader::Trader(std::string traderName, BankOfUniverse &bank, int energyCredit, int dilithiumUnits):
         traderName(std::move(traderName)), bank(bank), energyCredit(energyCredit), dilithiumUnits(dilithiumUnits) {}
 
+///////////// Seller: public Trader
+int Seller::getPrice() {return this->dilithiumPrice;}
+int Seller::sell(Buyer *toWhom, int cnt){
+    if(!acquire(cnt))
+        return -2;
+    else
+        return bank.registerTransaction(this, toWhom, cnt, this->dilithiumPrice);
+}
 
 
 

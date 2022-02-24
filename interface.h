@@ -78,5 +78,4 @@ public:
 
 
 
-
 #endif //DILITHIUM_INTERFACE_H
