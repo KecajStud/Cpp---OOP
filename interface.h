@@ -74,16 +74,16 @@ public:
 };
 
 class Buyer: public Trader{
-    virtual bool accept(int price);
+    virtual bool accept(int price, int cnt) = 0;
 public:
     bool buy(int cnt, Seller *fromWho);  //->spytaj o cene i sprawdz, czy git -> odbierz id (sprzedawca->sprzedaje) -> sprawdz, czy id ok -> idz do banku i finalizuj (bank->finalize)
     virtual int giveCredits(int amount); // -> check if enough credit and give energy point -> or send message and return -1
     virtual void takeDilithium(); // -> check if >0 and change dilithiumUnits
     //technical part:
-    Buyer(std::string traderName, BankOfUniverse &bank, int energyCredit=0, int dilithiumUnits=0): Trader(traderName, bank, energyCredit, dilithiumUnits){};
+    Buyer(std::string traderName, BankOfUniverse &bank, int energyCredit=0, int dilithiumUnits=0);
     Buyer(const Buyer&);
     Buyer& operator=(const Buyer&) = delete;
-    ~Buyer() = default;
+    ~Buyer() override = default;
 };
 
 class Ferengi: public Seller{

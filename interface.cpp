@@ -27,6 +27,8 @@ int Seller::sell(Buyer *toWhom, int cnt){
 ///////////// Buyer: public Trader
 Buyer::Buyer(std::string traderName, BankOfUniverse &bank, int energyCredit=0, int dilithiumUnits=0): Trader(traderName, bank, energyCredit, dilithiumUnits){};
 
+Buyer::Buyer(const Buyer &b): Buyer(b.traderName, b.bank, b.energyCredit, b.dilithiumUnits) {}
+
 
 
 
